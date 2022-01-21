@@ -16,6 +16,7 @@ public class Note {
     private Long id;
     private String title;
     private String note;
+    private String owner;
     private Timestamp createTime;
     private Timestamp lastUpdated;
 
@@ -41,6 +42,14 @@ public class Note {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public Timestamp getCreateTime() {

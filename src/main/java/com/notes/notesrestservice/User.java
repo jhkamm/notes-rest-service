@@ -2,11 +2,23 @@ package com.notes.notesrestservice;
 
 import java.sql.Timestamp;
 
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
     private String email;
     private String password;
     private Timestamp createTime;
     private Timestamp lastUpdated;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;
