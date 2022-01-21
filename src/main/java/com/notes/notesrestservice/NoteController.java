@@ -86,4 +86,14 @@ public class NoteController {
             return ResponseEntity.ok(noteRepository.save(newNote));
         });
     }
+
+    @DeleteMapping(path="/{id}")
+    public ResponseEntity<Object> deleteNote(@PathVariable("id") Long id) {
+        Optional<Note> note = noteRepository.findById(id);
+        if (!note.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        noteRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
