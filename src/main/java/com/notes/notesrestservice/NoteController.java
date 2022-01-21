@@ -25,6 +25,12 @@ public class NoteController {
     @Autowired
     private NoteRepository noteRepository;
 
+    @GetMapping(path="/all")
+    public ResponseEntity<Iterable<Note>> getAllUsers() {
+        // This returns a JSON or XML with the users
+        return ResponseEntity.ok(noteRepository.findAll());
+    }
+
     @GetMapping(path="/{id}")
     public ResponseEntity<Note> getNoteById(@PathVariable("id") Long id) {
         Optional<Note> note = noteRepository.findById(id);
@@ -37,10 +43,11 @@ public class NoteController {
     @PostMapping(path="/add") // Map ONLY POST Requests
     public ResponseEntity<Note> addNewNote (@RequestBody Note newNote) {
         if (newNote.getTitle().length() == 0 | newNote.getTitle().length() > 50) {
-            // Bad title, handle error on title
+            // Invalid title
             return ResponseEntity.badRequest().body(newNote);//"Cannot create note. Note title must not be empty and must be less than 50 characters.");
         }
         if (newNote.getNote().length() > 1000) {
+            // Invalid note
             return ResponseEntity.badRequest().body(newNote);//"Cannot create note. Note text must be less than 1000 characters.");
         }
         Timestamp timeNow = new Timestamp(System.currentTimeMillis());
@@ -58,7 +65,14 @@ public class NoteController {
 
     @PutMapping(path="/{id}")
     public ResponseEntity<Note> updateNote(@RequestBody Note newNote, @PathVariable("id") Long id) {
-        //Optional<Note> note = noteRepository.findById(id);
+        if (newNote.getTitle().length() == 0 | newNote.getTitle().length() > 50) {
+            // Invalid title
+            return ResponseEntity.badRequest().body(newNote);//"Cannot create note. Note title must not be empty and must be less than 50 characters.");
+        }
+        if (newNote.getNote().length() > 1000) {
+            // Invalid note
+            return ResponseEntity.badRequest().body(newNote);//"Cannot create note. Note text must be less than 1000 characters.");
+        }
         return noteRepository.findById(id).map(note -> {
             note.setTitle(newNote.getTitle());
             note.setNote(newNote.getNote());
@@ -71,11 +85,5 @@ public class NoteController {
             newNote.setLastUpdated(timeNow);
             return ResponseEntity.ok(noteRepository.save(newNote));
         });
-    }
-
-    @GetMapping(path="/all")
-    public ResponseEntity<Iterable<Note>> getAllUsers() {
-        // This returns a JSON or XML with the users
-        return ResponseEntity.ok(noteRepository.findAll());
     }
 }
