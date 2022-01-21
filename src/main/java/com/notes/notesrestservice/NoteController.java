@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,7 +26,7 @@ public class NoteController {
     private NoteRepository noteRepository;
 
     @GetMapping(path="/{id}")
-    public ResponseEntity<Note> getNoteById(@PathVariable("id") Integer id) {
+    public ResponseEntity<Note> getNoteById(@PathVariable("id") Long id) {
         Optional<Note> note = noteRepository.findById(id);
         if (!note.isPresent()) {
             return ResponseEntity.notFound().build();
@@ -34,28 +35,42 @@ public class NoteController {
     }
 
     @PostMapping(path="/add") // Map ONLY POST Requests
-    public ResponseEntity<String> addNewNote (@RequestParam String title, @RequestParam String note) {
-        if (title.length() == 0 | title.length() > 50) {
+    public ResponseEntity<Note> addNewNote (@RequestBody Note newNote) {
+        if (newNote.getTitle().length() == 0 | newNote.getTitle().length() > 50) {
             // Bad title, handle error on title
-            return ResponseEntity.badRequest().body("Cannot create note. Note title must not be empty and must be less than 50 characters.");
+            return ResponseEntity.badRequest().body(newNote);//"Cannot create note. Note title must not be empty and must be less than 50 characters.");
         }
-        if (note.length() > 1000) {
-            return ResponseEntity.badRequest().body("Cannot create note. Note text must be less than 1000 characters.");
+        if (newNote.getNote().length() > 1000) {
+            return ResponseEntity.badRequest().body(newNote);//"Cannot create note. Note text must be less than 1000 characters.");
         }
-        Note n = new Note();
-        n.setTitle(title);
-        n.setNote(note);
         Timestamp timeNow = new Timestamp(System.currentTimeMillis());
-        n.setCreateTime(timeNow);
-        n.setLastUpdated(timeNow);
-        noteRepository.save(n);
+        newNote.setCreateTime(timeNow);
+        newNote.setLastUpdated(timeNow);
+        noteRepository.save(newNote);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
           .path("/{id}")
-          .buildAndExpand(n.getId())
+          .buildAndExpand(newNote.getId())
           .toUri();
 
-        return ResponseEntity.created(uri).body("Note saved");
+        return ResponseEntity.created(uri).body(newNote);
+    }
+
+    @PutMapping(path="/{id}")
+    public ResponseEntity<Note> updateNote(@RequestBody Note newNote, @PathVariable("id") Long id) {
+        //Optional<Note> note = noteRepository.findById(id);
+        return noteRepository.findById(id).map(note -> {
+            note.setTitle(newNote.getTitle());
+            note.setNote(newNote.getNote());
+            note.setLastUpdated(new Timestamp(System.currentTimeMillis()));
+            return ResponseEntity.ok(noteRepository.save(note));
+        }).orElseGet(() -> {
+            newNote.setId(id);
+            Timestamp timeNow = new Timestamp(System.currentTimeMillis());
+            newNote.setCreateTime(timeNow);
+            newNote.setLastUpdated(timeNow);
+            return ResponseEntity.ok(noteRepository.save(newNote));
+        });
     }
 
     @GetMapping(path="/all")
