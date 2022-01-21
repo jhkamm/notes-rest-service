@@ -1,4 +1,4 @@
-package com.example.notesrestservice;
+package com.notes.notesrestservice;
 
 import java.lang.annotation.Inherited;
 

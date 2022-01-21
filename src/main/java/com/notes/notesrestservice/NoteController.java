@@ -1,4 +1,4 @@
-package com.example.accessingdatamysql;
+package com.notes.notesrestservice;
 
 import java.sql.Timestamp;
 
@@ -10,19 +10,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 @Controller
 @RequestMapping(path="/notes")
-public class MainController {
+public class NoteController {
     @Autowired
     private NoteRepository noteRepository;
 
     @PostMapping(path="/add") // Map ONLY POST Requests
-    public @ResponseBody String addNewUser (@RequestParam String title, @RequestParam String note) {
-        if (title.length == 0 | title.length > 50) {
+    public @ResponseBody String addNewNote (@RequestParam String title, @RequestParam String note) {
+        if (title.length() == 0 | title.length() > 50) {
             // Bad title, handle error on title
             return "Cannot create note. Note title must not be empty and must be less than 50 characters.";
         }
-        if (note.length > 1000) {
+        if (note.length() > 1000) {
             return "Cannot create note. Note text must be less than 1000 characters.";
         }
         Note n = new Note();
@@ -36,7 +37,7 @@ public class MainController {
     }
 
     @GetMapping(path="/all")
-    public @ResponseBody Iterable<User> getAllUsers() {
+    public @ResponseBody Iterable<Note> getAllUsers() {
         // This returns a JSON or XML with the users
         return noteRepository.findAll();
     }
