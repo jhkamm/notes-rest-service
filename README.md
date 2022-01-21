@@ -11,7 +11,7 @@ Clone the repository:
 Run the application with the Gradle wrapper:
 `./gradlew bootRun`
 
-    OR
+OR
 
 Run the application with the Maven wrapper:
 `./mvnw spring-boot:run`
