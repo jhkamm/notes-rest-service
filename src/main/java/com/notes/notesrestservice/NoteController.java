@@ -3,22 +3,23 @@ package com.notes.notesrestservice;
 import java.sql.Timestamp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+//import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 
-@Controller
+@RestController
 @RequestMapping(path="/notes")
 public class NoteController {
     @Autowired
     private NoteRepository noteRepository;
 
     @PostMapping(path="/add") // Map ONLY POST Requests
-    public @ResponseBody String addNewNote (@RequestParam String title, @RequestParam String note) {
+    public String addNewNote (@RequestParam String title, @RequestParam String note) {
         if (title.length() == 0 | title.length() > 50) {
             // Bad title, handle error on title
             return "Cannot create note. Note title must not be empty and must be less than 50 characters.";
@@ -33,11 +34,11 @@ public class NoteController {
         n.setCreateTime(timeNow);
         n.setLastUpdated(timeNow);
         noteRepository.save(n);
-        return "Saved";
+        return "Note saved";
     }
 
     @GetMapping(path="/all")
-    public @ResponseBody Iterable<Note> getAllUsers() {
+    public Iterable<Note> getAllUsers() {
         // This returns a JSON or XML with the users
         return noteRepository.findAll();
     }
