@@ -25,6 +25,7 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // Disable CSRF to allow write/delete requests. I'm sure this is probably not the right way to do this.
         http.authorizeRequests().anyRequest().authenticated()
             .and().httpBasic()
             .and().csrf().disable();;

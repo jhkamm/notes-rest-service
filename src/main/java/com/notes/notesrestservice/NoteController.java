@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -76,12 +77,18 @@ public class NoteController {
     @GetMapping(path="/{id}")
     public ResponseEntity<Note> getNoteById(@RequestHeader("authorization") String auth, @PathVariable("id") Long id) {
         String userEmail = decodeAuthHeader(auth).getEmail();
-        Optional<Note> note = noteRepository.findById(id);
-        if (!note.isPresent() | !note.get().getOwner().equals(decodeAuthHeader(auth).getEmail())) {
-            log.info("Note does not belong to user issuing request.");
+        Optional<Note> noteOptional = noteRepository.findById(id);
+        try {
+            Note note = noteOptional.get();
+            if (!note.getOwner().equals(decodeAuthHeader(auth).getEmail())) {
+                log.info("Note does not belong to user issuing request");
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(note);
+        } catch (NoSuchElementException e) {
+            log.info("Note does not exist");
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(note.get());
     }
 
     // Create method
