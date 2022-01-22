@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Configuration;
 class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
-    @Autowired
-    private UserRepository userRepository;
     private UserManager userManager;
 
     @Bean
@@ -23,7 +21,7 @@ class LoadDatabase {
             return args -> {
                 try {
                     userManager = new UserManager();
-                    userManager.setUserRepository(userRepository);
+                    userManager.setUserRepository(repository);
                     User user1 = new User();
                     user1.setEmail("user1@example.com");
                     user1.setPassword("password1");
