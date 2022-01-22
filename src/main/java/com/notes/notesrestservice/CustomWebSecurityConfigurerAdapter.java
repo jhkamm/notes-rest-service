@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
@@ -25,22 +23,19 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
-        UserDetails user1 = User.builder()
-            .passwordEncoder(this.passwordEncoder())
+        UserDetails user1 = User.withDefaultPasswordEncoder()
             .username("user1")
             .password("foo")
             .roles("ADMIN")
             .build();
 
-        UserDetails user2 = User.builder()
-            .passwordEncoder(this.passwordEncoder())
+        UserDetails user2 = User.withDefaultPasswordEncoder()
             .username("user2")
             .password("bar")
             .roles("ADMIN")
             .build();
 
-        UserDetails user3 = User.builder()
-            .passwordEncoder(this.passwordEncoder())
+        UserDetails user3 = User.withDefaultPasswordEncoder()
             .username("user3")
             .password("baz")
             .roles("ADMIN")
@@ -53,10 +48,5 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
                 add(user3);
             }
         });
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
