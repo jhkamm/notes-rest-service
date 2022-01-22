@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
+    private final UserManager userManager = new UserManager();
 
     @Bean
     CommandLineRunner initDatabase(UserRepository repository) {
@@ -19,7 +20,7 @@ class LoadDatabase {
             return args -> {
                 User user1 = new User();
                 user1.setEmail("user1@example.com");
-                user1.setPassword("password");
+                user1.setPassword("password1");
                 Timestamp timeNow = new Timestamp(System.currentTimeMillis());
                 user1.setCreateTime(timeNow);
                 user1.setLastUpdated(timeNow);
@@ -29,8 +30,8 @@ class LoadDatabase {
                 timeNow = new Timestamp(System.currentTimeMillis());
                 user2.setCreateTime(timeNow);
                 user2.setLastUpdated(timeNow);
-                log.info("Preloading " + repository.save(user1));
-                log.info("Preloading " + repository.save(user2));
+                log.info("Preloading " + userManager.createUser(user1));
+                log.info("Preloading " + userManager.createUser(user2));
             };
         }
         return args -> {
