@@ -2,12 +2,22 @@
 Provides a simple RESTful API for creating, reading, updating and deleting notes.
 Uses SpringBoot framework for RESTful API functionality, MySQL for storage and Gradle for building.
 
+The application preloads two users into the system at startup.  The users are:
+
+user1:
+* username/email: `user1@example.com`
+* password: `password1`
+
+user2:
+* username/email: `user2@example.com`
+* passowrd: `password2`
+
+# To run
 Dependencies for running:
 * gradle
 * docker
 * docker-compose
 
-# To run
 Clone the repository and run the application with docker-compose:
 ```
 git clone https://github.com/jhkamm/notes-rest-service.git
