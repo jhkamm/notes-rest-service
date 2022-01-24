@@ -13,6 +13,7 @@ Dependencies for running:
 Clone the repository and run the application with docker-compose:
 ```
 git clone git@github.com:jhkamm/notes-rest-service.git
+cd notes-rest-service
 ./gradlew build
 sudo docker-compose up
 ```
