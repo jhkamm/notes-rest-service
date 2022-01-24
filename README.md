@@ -4,17 +4,20 @@ Uses SpringBoot framework for RESTful API functionality and MySQL for storage.
 
 Supports both Gradle and Maven as build systems.
 
+Dependencies for running:
+* gradle
+* docker
+* docker-compose
+
 # To run
 Clone the repository:
 `git clone git@github.com:jhkamm/notes-rest-service.git`
 
 Run the application with the Gradle wrapper:
-`./gradlew bootRun`
-
-OR
-
-Run the application with the Maven wrapper:
-`./mvnw spring-boot:run`
+```
+./gradlew build
+sudo docker-compose up
+```
 
 # Example CURL requests to test the API
 ## Create a note
