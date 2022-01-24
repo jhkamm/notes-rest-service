@@ -10,11 +10,9 @@ Dependencies for running:
 * docker-compose
 
 # To run
-Clone the repository:
-`git clone git@github.com:jhkamm/notes-rest-service.git`
-
-Run the application with the Gradle wrapper:
+Clone the repository and run the application with docker-compose:
 ```
+git clone git@github.com:jhkamm/notes-rest-service.git
 ./gradlew build
 sudo docker-compose up
 ```
