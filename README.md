@@ -1,8 +1,6 @@
 # Notes REST Service for DISQO Interview
 Provides a simple RESTful API for creating, reading, updating and deleting notes.
-Uses SpringBoot framework for RESTful API functionality and MySQL for storage.
-
-Supports both Gradle and Maven as build systems.
+Uses SpringBoot framework for RESTful API functionality, MySQL for storage and Gradle for building.
 
 Dependencies for running:
 * gradle
